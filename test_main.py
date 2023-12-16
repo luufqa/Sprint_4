@@ -21,105 +21,104 @@ class TestBooksCollector:
 
         # проверяем, что добавилось именно две книги в
         # словарь books_genre, словарь имеет длину 2
-        assert len(collector.books_genre) == 2
+        assert len(collector.get_books_genre()) == 2
 
     def test_add_new_book_add_two_books_with_genre(self):
         # создаем экземпляр (объект) класса BooksCollector
-        collector2 = BooksCollector()
+        collector = BooksCollector()
 
         # добавляем две книги с указанием жанра
-        collector2.add_new_book('Гордость и предубеждение и зомби')
-        collector2.add_new_book('Что делать, если ваш кот хочет вас убить')
-        collector2.set_book_genre('Гордость и предубеждение и зомби', 'Ужасы')
-        collector2.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Комедии')
+        collector.add_new_book('Гордость и предубеждение и зомби')
+        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+        collector.set_book_genre('Гордость и предубеждение и зомби', 'Ужасы')
+        collector.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Комедии')
 
         # проверяем, что две книги добавились в
-        # словарь books_genre и у них указаны жанры
-        assert collector2.books_genre == {
+        # словарь books_genre и у них указаны жанрыget_book_genre(self, name)
+        assert collector.get_books_genre() == {
             'Гордость и предубеждение и зомби': 'Ужасы',
             'Что делать, если ваш кот хочет вас убить': 'Комедии'
         }
 
     def test_get_book_genre_in_dict_books_genre(self):
         # создаем экземпляр (объект) класса BooksCollector
-        collector3 = BooksCollector()
+        collector = BooksCollector()
 
         # добавляем две книги с указанием жанра
-        collector3.add_new_book('Кафе на краю земли')
-        collector3.set_book_genre('Кафе на краю земли', 'Фантастика')
-        collector3.get_book_genre('Кафе на краю земли')
+        collector.add_new_book('Кафе на краю земли')
+        collector.set_book_genre('Кафе на краю земли', 'Фантастика')
 
         # проверяем, что у добавленной книги
         # указан жанр
-        assert collector3.books_genre.get('Кафе на краю земли') == 'Фантастика'
+        assert collector.get_book_genre('Кафе на краю земли') == 'Фантастика'
 
-    @pytest.mark.parametrize("a, expected",
+    @pytest.mark.parametrize("genre, expected_book",
                              [('Ужасы', "Гордость и предубеждение и зомби"), ("Фантастика", "Кафе на краю земли")])
-    def test_get_books_with_specific_genre_with_different_options(self, a, expected):
-        collector4 = BooksCollector()
-        collector4.add_new_book('Гордость и предубеждение и зомби')
-        collector4.add_new_book('Что делать, если ваш кот хочет вас убить')
-        collector4.add_new_book('Кафе на краю земли')
-        collector4.set_book_genre('Гордость и предубеждение и зомби', 'Ужасы')
-        collector4.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Комедии')
-        collector4.set_book_genre('Кафе на краю земли', 'Фантастика')
+    def test_get_books_with_specific_genre_with_different_options(self, genre, expected_book):
+        collector = BooksCollector()
+        collector.add_new_book('Гордость и предубеждение и зомби')
+        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+        collector.add_new_book('Кафе на краю земли')
+        collector.set_book_genre('Гордость и предубеждение и зомби', 'Ужасы')
+        collector.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Комедии')
+        collector.set_book_genre('Кафе на краю земли', 'Фантастика')
 
-        assert collector4.get_books_with_specific_genre(a)[0] == expected
+        assert collector.get_books_with_specific_genre(genre)[0] == expected_book
 
-    @pytest.mark.parametrize('a', ['Ужасы', 'Детективы', 'Мультфильмы'])
-    def test_get_books_with_specific_genre_with_different_options_if_book_not_in_true(self, a):
-        collector5 = BooksCollector()
-        collector5.add_new_book('Что делать, если ваш кот хочет вас убить')
-        collector5.add_new_book('Кафе на краю земли')
-        collector5.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Комедии')
-        collector5.set_book_genre('Кафе на краю земли', 'Фантастика')
+    @pytest.mark.parametrize('genre', ['Ужасы', 'Детективы', 'Мультфильмы'])
+    def test_get_books_with_specific_genre_with_different_options_if_book_not_in_true(self, genre):
+        collector = BooksCollector()
+        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+        collector.add_new_book('Кафе на краю земли')
+        collector.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Комедии')
+        collector.set_book_genre('Кафе на краю земли', 'Фантастика')
 
-        assert collector5.get_books_with_specific_genre(a) == []
+        assert collector.get_books_with_specific_genre(genre) == []
 
     def test_get_books_genre_with_books(self):
-        collector6 = BooksCollector()
-        collector6.add_new_book('Что делать, если ваш кот хочет вас убить')
-        collector6.add_new_book('Кафе на краю земли')
-        collector6.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Комедии')
-        collector6.set_book_genre('Кафе на краю земли', 'Фантастика')
+        collector = BooksCollector()
+        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+        collector.add_new_book('Кафе на краю земли')
+        collector.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Комедии')
+        collector.set_book_genre('Кафе на краю земли', 'Фантастика')
 
-        assert collector6.get_books_genre() == {'Что делать, если ваш кот хочет вас убить': 'Комедии',
-                                                'Кафе на краю земли': 'Фантастика'}
+        assert collector.get_books_genre() == {'Что делать, если ваш кот хочет вас убить': 'Комедии',
+                                               'Кафе на краю земли': 'Фантастика'}
 
     def test_get_books_for_children(self):
-        collector7 = BooksCollector()
-        collector7.add_new_book('Что делать, если ваш кот хочет вас убить')
-        collector7.add_new_book('Приключения Том и Джерри')
-        collector7.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Комедии')
-        collector7.set_book_genre('Приключения Том и Джерри', 'Мультфильмы')
+        collector = BooksCollector()
+        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+        collector.add_new_book('Приключения Том и Джерри')
+        collector.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Комедии')
+        collector.set_book_genre('Приключения Том и Джерри', 'Мультфильмы')
 
-        assert collector7.get_books_for_children() == ['Что делать, если ваш кот хочет вас убить',
-                                                       'Приключения Том и Джерри']
+        assert collector.get_books_for_children() == ['Что делать, если ваш кот хочет вас убить',
+                                                      'Приключения Том и Джерри']
 
     def test_add_book_in_favorites_book_in_list(self):
-        collector8 = BooksCollector()
-        collector8.add_new_book('Приключения Том и Джерри')
-        collector8.set_book_genre('Приключения Том и Джерри', 'Мультфильмы')
-        collector8.add_book_in_favorites('Приключения Том и Джерри')
-        assert collector8.favorites[0] == 'Приключения Том и Джерри'
+        collector = BooksCollector()
+        collector.add_new_book('Приключения Том и Джерри')
+        collector.add_book_in_favorites('Приключения Том и Джерри')
+        book_in_favorit = collector.favorites[0]
+        assert book_in_favorit == 'Приключения Том и Джерри'
 
     def test_delete_book_from_favorites(self):
-        collector9 = BooksCollector()
-        collector9.add_new_book('Что делать, если ваш кот хочет вас убить')
-        collector9.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Комедии')
-        collector9.add_book_in_favorites('Что делать, если ваш кот хочет вас убить')
-        collector9.delete_book_from_favorites('Что делать, если ваш кот хочет вас убить')
-        assert collector9.favorites == []
+        collector = BooksCollector()
+        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+        collector.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Комедии')
+        collector.add_book_in_favorites('Что делать, если ваш кот хочет вас убить')
+        collector.delete_book_from_favorites('Что делать, если ваш кот хочет вас убить')
+        assert collector.get_list_of_favorites_books() == []
 
     def test_get_list_of_favorites_books(self):
-        collector10 = BooksCollector()
-        collector10.add_new_book('Что делать, если ваш кот хочет вас убить')
-        collector10.add_new_book('Приключения Том и Джерри')
-        collector10.add_new_book('Кафе на краю земли')
-        collector10.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Комедии')
-        collector10.set_book_genre('Приключения Том и Джерри', 'Мультфильмы')
-        collector10.set_book_genre('Кафе на краю земли', 'Фантастика')
+        collector = BooksCollector()
+        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+        collector.add_new_book('Приключения Том и Джерри')
+        collector.add_new_book('Кафе на краю земли')
+        collector.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Комедии')
+        collector.set_book_genre('Приключения Том и Джерри', 'Мультфильмы')
+        collector.set_book_genre('Кафе на краю земли', 'Фантастика')
 
-        collector10.add_book_in_favorites('Кафе на краю земли')
-        collector10.add_book_in_favorites('Приключения Том и Джерри')
-        assert collector10.get_list_of_favorites_books() == ['Кафе на краю земли', 'Приключения Том и Джерри']
+        collector.add_book_in_favorites('Кафе на краю земли')
+        collector.add_book_in_favorites('Приключения Том и Джерри')
+        assert collector.get_list_of_favorites_books() == ['Кафе на краю земли', 'Приключения Том и Джерри']
